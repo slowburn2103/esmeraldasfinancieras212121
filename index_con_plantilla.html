@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Esmeraldas del Saber Financiero — Coscuez, Boyacá</title>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<style>
+  :root{
+    --bg:#04100f;
+    --card:#0f1716;
+    --emerald:#006a44;
+    --emerald-bright:#00c06b;
+    --gold:#c9a75a;
+    --muted:#bfc7c4;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Inter", "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,var(--bg), #03100f 140%);
+    color: #e8efec;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+    scroll-behavior:smooth;
+  }
+
+  header{
+    background: linear-gradient(135deg, rgba(0,106,68,0.95), rgba(8,80,52,0.95));
+    padding:36px 18px;
+    text-align:center;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    position:sticky; top:0; z-index:60;
+  }
+  .logo{ width:44px; height:44px; border-radius:10px; background:linear-gradient(180deg,var(--emerald),var(--emerald-bright)); display:inline-flex; align-items:center; justify-content:center; color:#04130e; font-weight:800; margin-right:10px}
+  header h1{ margin:10px 0 2px; color:var(--gold); font-size:clamp(1.5rem,2.4vw,2rem) }
+  header p{ margin:0; color:var(--muted) }
+
+  nav{ display:flex; gap:10px; justify-content:center; padding:10px; background:rgba(0,0,0,0.12); position:sticky; top:88px; z-index:50 }
+  nav a{ color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:8px; font-weight:600; transition:all .22s }
+  nav a:hover{ color:var(--emerald-bright); transform:translateY(-3px) }
+
+  main{ max-width:1100px; margin:28px auto; padding:0 18px 70px }
+  section.card{
+    background: linear-gradient(180deg,var(--card), rgba(255,255,255,0.01));
+    border-radius:14px; padding:26px; margin-bottom:26px;
+    box-shadow: 0 12px 34px rgba(0,0,0,0.45);
+    border:1px solid rgba(255,255,255,0.03);
+    opacity:0; transform:translateY(18px); transition:all .6s cubic-bezier(.2,.9,.2,1);
+  }
+  section.card.visible{ opacity:1; transform:none }
+
+  .lead{ display:flex; gap:16px; align-items:center; flex-wrap:wrap }
+  .thumb{ width:160px; min-width:120px; border-radius:10px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03) }
+  .thumb img{ display:block; width:100%; height:100%; object-fit:cover; transition:transform .6s }
+  .thumb:hover img{ transform:scale(1.06) }
+  .text{ flex:1; min-width:220px }
+
+  h2{ margin-top:0; color:var(--emerald-bright); font-size:1.25rem }
+  p{ color:var(--muted); margin:0 0 12px 0 }
+
+  /* Accordion */
+  .accordion{ margin-top:8px; display:grid; gap:12px }
+  .acc-item{ background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.03) }
+  .acc-head{ display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer }
+  .acc-head h3{ margin:0; font-size:1rem; color:var(--gold) }
+  .acc-head small{ color:var(--muted); margin-left:6px; font-weight:600 }
+  .acc-icon{ margin-left:auto; width:34px;height:34px;border-radius:8px; display:grid;place-items:center;background:var(--glass); transition:transform .28s }
+  .acc-body{ max-height:0; padding:0 16px; overflow:hidden; transition:max-height .42s, padding .32s; border-top:1px dashed rgba(255,255,255,0.03) }
+  .acc-body.open{ padding:16px; max-height:520px }
+
+  .gloss-example{ background: rgba(255,255,255,0.02); padding:12px; border-radius:8px; color:var(--muted); font-size:0.97rem }
+
+  /* Books */
+  .books-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-top:12px }
+  .book{
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+    padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03);
+    transition:transform .28s, box-shadow .28s;
+  }
+  .book:hover{ transform:translateY(-6px); box-shadow:0 14px 36px rgba(0,0,0,0.6) }
+  .book .cover{ height:140px; border-radius:8px; overflow:hidden; margin-bottom:10px }
+  .book .cover img{ width:100%; height:100%; object-fit:cover }
+  .book h4{ margin:6px 0 6px; color:var(--emerald-bright) }
+  .book p{ color:var(--muted); font-size:0.95rem; margin:0 }
+
+  /* Quiz original */
+  .quiz-container{ background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.45)); border-radius:12px; padding:18px; border:1px solid rgba(0,200,107,0.06) }
+  .q-block{ margin-bottom:12px; padding:12px; border-radius:8px; background:rgba(255,255,255,0.01) }
+  .q-block.correct{ border:1px solid rgba(0,200,107,0.18); box-shadow:0 8px 20px rgba(0,200,107,0.04) }
+  .q-block.wrong{ border:1px solid rgba(255,80,80,0.12) }
+  .q-block .question{ color:var(--emerald-bright); font-weight:700 }
+  .options label{ display:block; margin:8px 0; cursor:pointer; padding:8px 10px; border-radius:8px; transition:background .16s }
+  .options label:hover{ background:rgba(0,200,107,0.03) }
+
+  .btn{ background:linear-gradient(180deg,var(--emerald),var(--emerald-bright)); color:#04130e; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700; box-shadow:0 10px 24px rgba(0,200,107,0.08) }
+  .btn.ghost{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.03) }
+
+  #result{ margin-top:14px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.35); color:var(--emerald-bright); font-weight:700; text-align:center; border:1px solid rgba(0,200,107,0.06) }
+
+  /* Crossword */
+  .crossword-wrap{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start }
+  .cw-grid{ display:grid; gap:3px; background:transparent; padding:6px; border-radius:8px }
+  .cw-cell{ width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.02); border-radius:6px; border:1px solid rgba(255,255,255,0.03) }
+  .cw-cell.black{ background:#04100f; border:1px solid rgba(0,0,0,0.6) }
+  .cw-cell input{ width:100%; height:100%; border:0; background:transparent; color:var(--muted); font-weight:700; text-align:center; font-size:1rem; outline:none }
+  .clues{ min-width:260px; max-width:420px }
+  .clues h4{ margin:6px 0; color:var(--emerald-bright) }
+  .clues ol{ color:var(--muted) }
+  .cw-actions{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap }
+
+  footer{ margin-top:28px; padding:22px 18px; text-align:center; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02) }
+
+  @media (max-width:880px){ .lead{ flex-direction:column; align-items:flex-start } .thumb{ width:100%; min-width:unset } .cw-grid{ order:2 } .clues{ order:1 } }
+
+/* === Dinamic Enhancements === */
+body {
+  background: linear-gradient(270deg, #04100f, #032018, #04100f);
+  background-size: 600% 600%;
+  animation: bgShift 18s ease infinite;
+}
+@keyframes bgShift {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(0,192,107,0.4);
+}
+h2:hover {
+  text-shadow: 0 0 8px rgba(0,192,107,0.5);
+}
+.book:hover {
+  transform: translateY(-6px) rotate3d(1, 1, 0, 3deg);
+  transition: transform 0.4s ease;
+}
+footer {
+  animation: glow 4s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 4px #00c06b; }
+  to { text-shadow: 0 0 16px #00c06b; }
+}
+/* Floating "Back to Top" button */
+#backToTop {
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  background:linear-gradient(180deg,#006a44,#00c06b);
+  color:#04130e;
+  padding:12px 14px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(0,192,107,0.4);
+  font-weight:800;
+  font-size:1rem;
+  transition:transform 0.3s ease;
+  z-index:99;
+}
+#backToTop:hover {
+  transform:scale(1.1);
+}
+
+/* === Estilo Elegante === */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap');
+
+h1, h2, h3 {
+  font-family: "Playfair Display", serif;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+}
+
+p, label, button, a, input {
+  font-family: "Inter", sans-serif;
+}
+
+h2 {
+  background: linear-gradient(90deg, #00c06b, #c9a75a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(0,192,107,0.1);
+}
+
+header h1 {
+  text-shadow: 0 0 10px rgba(201,167,90,0.3);
+}
+
+section.card {
+  border: 1px solid rgba(0, 192, 107, 0.15);
+  box-shadow: 0 0 25px rgba(0, 192, 107, 0.05);
+  backdrop-filter: blur(3px);
+}
+
+.acc-head {
+  background: rgba(0,192,107,0.05);
+  border-left: 3px solid #00c06b;
+  border-radius: 6px;
+  transition: all 0.4s ease;
+}
+.acc-head:hover {
+  background: rgba(0,192,107,0.1);
+  transform: translateX(4px);
+}
+.acc-body {
+  background: rgba(255,255,255,0.03);
+  border-radius: 6px;
+  padding: 16px;
+  color: #d8e5e0;
+  font-size: 0.97rem;
+  line-height: 1.7;
+  transition: all 0.4s ease;
+}
+
+.book {
+  border: 1px solid rgba(0,192,107,0.1);
+  box-shadow: 0 0 18px rgba(0,192,107,0.04);
+}
+.book h4 {
+  font-family: "Playfair Display", serif;
+}
+
+footer {
+  font-family: "Playfair Display", serif;
+  letter-spacing: 0.3px;
+  font-size: 1rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; align-items:center; justify-content:center">
+    <div class="logo">ES</div>
+  </div>
+  <h1>Esmeraldas del Saber Financiero</h1>
+  <p>Proyecto — Coscuez (San Pablo de Borbur), Boyacá · Educación Financiera contextualizada para jóvenes</p>
+</header>
+
+<nav>
+  <a href="#contexto">Contexto</a>
+  <a href="#conceptos">Conceptos</a>
+  <a href="#libros">Libros</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#crucigrama">Crucigrama</a>
+  <a href="#recomendaciones">Recomendaciones</a>
+</nav>
+
+<main>
+  <!-- CONTEXTO -->
+  <section id="contexto" class="card">
+    <div class="lead">
+      <div class="thumb" aria-hidden="true">
+        
+      </div>
+      <div class="text">
+        <h2>Contexto — Coscuez</h2>
+        <p>
+          Coscuez es una vereda con tradición esmeraldífera dentro del municipio de San Pablo de Borbur. La extracción de esmeraldas genera ingresos valiosos pero irregulares: hay periodos de alta liquidez seguidos de lapsos de poca o ninguna entrada de dinero.
+        </p>
+        <p>
+          Ese vaivén exige habilidades distintas: planificar, priorizar y aprender a guardar parte de lo que entra para el futuro. Este proyecto apunta a formar en esas habilidades a estudiantes de grado 9° para que puedan transformar oportunidades temporales en bienestar durable.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPTOS -->
+  <section id="conceptos" class="card">
+    <h2>Conceptos clave (haz clic para desplegar)</h2>
+    <div class="accordion" id="accordion">
+      <!-- (items same as previous detailed ones) -->
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc1" role="button" aria-expanded="false">
+          <div><h3>Presupuesto</h3><small>Planifica ingresos y gastos</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc1" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Un presupuesto compara ingresos y gastos en un período. En Coscuez, al trabajar por producción, conviene estimar ingresos promedio conservadores y priorizar gastos esenciales.</p>
+          <p><strong>Guía práctica:</strong> Anota durante 3 meses los ingresos reales, saca un promedio prudente y arma un presupuesto que cubra necesidades, ahorre y permita invertir pequeñas porciones en proyectos o educación.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc2" role="button" aria-expanded="false">
+          <div><h3>Ahorro</h3><small>Reserva para imprevistos y metas</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc2" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Porción del ingreso destinada a seguridad financiera o metas.</p>
+          <p><strong>Consejo para Coscuez:</strong> Si recibes dinero por la venta de esmeraldas, aparta inmediatamente 10–20% para ahorro. Con el tiempo, ese hábito construye un fondo capaz de cubrir emergencias o financiar proyectos productivos.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc3" role="button" aria-expanded="false">
+          <div><h3>Inversión</h3><small>Hacer crecer el dinero</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc3" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Usar recursos para generar beneficios en el tiempo.</p>
+          <p><strong>Ideas prácticas:</strong> Pequeñas inversiones en emprendimientos locales, compra de herramientas que aumenten productividad o cursos que mejoren habilidades técnicas pueden generar retornos sostenibles para la familia minera.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc4" role="button" aria-expanded="false">
+          <div><h3>Crédito</h3><small>Préstamos con condiciones</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc4" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Dinero prestado que se devuelve con intereses.</p>
+          <p><strong>Recomendación:</strong> Evitar prestamistas informales. Si se toma crédito, calcular capacidad de pago real y preferir condiciones claras; el crédito debe ser una herramienta para crecer, no para sostener gastos corrientes.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc5" role="button" aria-expanded="false">
+          <div><h3>Fondo de emergencia</h3><small>Colchón ante imprevistos</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc5" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Reserva líquida para gastos inesperados (accidentes, enfermedad, paros).</p>
+          <p><strong>Consejo:</strong> Mantenerlo en un lugar seguro y accesible, separado de dinero destinado a gastos cotidianos; objetivo mínimo: 3 meses de gastos esenciales.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc6" role="button" aria-expanded="false">
+          <div><h3>Consumo responsable</h3><small>Priorizar necesidades</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc6" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Tomar decisiones de compra según prioridades reales.</p>
+          <p><strong>Práctica:</strong> Antes de comprar, pregunta: ¿esto es esencial? Si la respuesta es no y el dinero es limitado, posponer la compra protege el presupuesto familiar.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc7" role="button" aria-expanded="false">
+          <div><h3>Puntaje crediticio</h3><small>Historial y confianza</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc7" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Medida usada por entidades para evaluar la probabilidad de repago.</p>
+          <p><strong>Consejo:</strong> Pagar obligaciones a tiempo y evitar moras; lleva un control simple de pagos para construir historial y acceder a mejores oportunidades si se necesita crédito.</p>
+        </div>
+      </article>
+
+      <article class="acc-item">
+        <div class="acc-head" data-target="acc8" role="button" aria-expanded="false">
+          <div><h3>Diversificación</h3><small>Reducir riesgos</small></div>
+          <div class="acc-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg></div>
+        </div>
+        <div id="acc8" class="acc-body" aria-hidden="true">
+          <p class="gloss-example"><strong>Definición:</strong> Dispersar recursos en varias actividades para no depender de una sola fuente.</p>
+          <p><strong>Ejemplo:</strong> Combinar ingresos mineros con agricultura, comercio o servicios; así la familia resiste mejor ante caídas en la producción o precio del mineral.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- BOOKS -->
+  <section id="libros" class="card">
+    <h2>Libros recomendados — Lecturas que transforman</h2>
+<div style="text-align:center; margin-bottom:18px;">
+  <a href="https://drive.google.com/drive/folders/1b8-hz1_o4MrM54csqVywU5WeYoefiIUW" target="_blank" rel="noopener noreferrer" class="btn">📚 Descargar biblioteca completa</a>
+</div>
+
+    <p style="margin-bottom:8px">Aquí tienes una selección que mezcla educación financiera pura y herramientas de mentalidad y productividad. Los textos incluyen resúmenes y por qué son útiles para jóvenes en Coscuez.</p>
+
+    <div class="books-grid">
+      <!-- Book 1 -->
+      <article class="book">
+        <div class="cover"></div>
+        <h4>Padre Rico, Padre Pobre — Robert Kiyosaki</h4>
+        <p>
+          Kiyosaki desafía la idea de que estudiar mucho garantiza seguridad financiera. Este libro abre la mente: diferencia entre activos y pasivos, la importancia de crear flujos de ingreso y pensar como empresario. Para un joven de Coscuez, ofrece la visión de convertir ingresos esporádicos en activos reales.
+        </p>
+      </article>
+
+      <!-- Book 2 -->
+      <article class="book">
+        <div class="cover"></div>
+        <h4>El hombre más rico de Babilonia — George S. Clason</h4>
+        <p>
+          Clason entrega lecciones básicas y universales: paga a ti mismo primero, controla los gastos y haz que tu dinero trabaje para ti. Sus parábolas son fáciles de aplicar: excelentes guías para formar hábitos de ahorro entre familias mineras.
+        </p>
+      </article>
+
+      <!-- Book 3 -->
+      <article class="book">
+        <div class="cover"></div>
+        <h4>Los secretos de la mente millonaria — T. Harv Eker</h4>
+        <p>
+          Eker explora creencias que limitan la prosperidad. Su enfoque combina actitud mental con acciones concretas: planificar, invertir y educarse. Muy útil para jóvenes que desean cambiar la relación emocional con el dinero y tomar decisiones más audaces y responsables.
+        </p>
+      </article>
+
+      <!-- Book 4 -->
+      <article class="book">
+        <div class="cover"></div>
+        <h4>Piense y hágase rico — Napoleon Hill</h4>
+        <p>
+          Un clásico sobre mentalidad, metas y perseverancia. Hill explora cómo la claridad de propósito, los hábitos y la perseverancia impulsan resultados financieros y personales. Inspirador para jóvenes líderes comunitarios en Coscuez que quieran transformar sus ideas en proyectos.
+        </p>
+      </article>
+
+      <!-- Book 5 -->
+      <article class="book">
+        <div class="cover"></div>
+        <h4>Hábitos atómicos — James Clear</h4>
+        <p>
+          Clear muestra cómo pequeños cambios diarios generan resultados enormes con el tiempo. Para construir ahorro o disciplina financiera, los hábitos son la palanca más poderosa. Ideal para estudiantes que quieren empezar con pasos simples y sostenibles.
+        </p>
+      </article>
+
+      <!-- Book 6 -->
+      <article class="book">
+        <div class="cover"></div>
+        <h4>Guía práctica a la inversión (selección breve)</h4>
+        <p>
+          Lecturas y guías básicas sobre inversión responsable: entender riesgo, horizonte temporal y diversificación. En contextos rurales, priorizar inversiones locales con demanda comprobada y empezar con pequeñas cantidades.
+        </p>
+      </article>
+    </div>
+  
+  <!-- PLANTILLA DE AHORROS -->
+  <section id="plantilla" class="card">
+    <h2>Plantilla de Ahorros — Controla tu dinero fácilmente</h2>
+    <p>Descarga una hoja de Excel diseñada para ayudarte a registrar ingresos, gastos y metas de ahorro. Es sencilla, práctica y perfecta para empezar a organizar tus finanzas personales.</p>
+    <div style="text-align:center; margin-top:14px;">
+      <a href="https://drive.google.com/drive/folders/1CDUNXe-cFCOTZE67mfD6YMlttoDTIB0t" target="_blank" rel="noopener noreferrer" class="btn">📥 Descargar plantilla de ahorros</a>
+    </div>
+  </section>
+</section>
+
+  <!-- QUIZ (original) -->
+  <section id="quiz" class="card">
+    <h2>Quiz — Repasa lo aprendido</h2>
+    <p>Responde y luego presiona <strong>Calcular resultado</strong>. Este quiz mantiene retroalimentación inmediata y sugerencias.</p>
+
+    <div class="quiz-container" id="quizContainer"></div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="checkBtn" class="btn">Calcular resultado</button>
+      <button id="resetBtn" class="btn ghost">Reiniciar</button>
+    </div>
+
+    <div id="result" role="status" aria-atomic="true" style="display:none"></div>
+  </section>
+
+  <!-- CRUCIGRAMA -->
+  <section id="crucigrama" class="card">
+    <h2>Crucigrama financiero — Pon a prueba tu vocabulario</h2>
+    <p>Completa las casillas con las palabras relacionadas. Usa mayúsculas o minúsculas; cuando termines, presiona <strong>Comprobar</strong>. Si te atascas, usa <strong>Mostrar solución</strong>.</p>
+
+    <div class="crossword-wrap">
+      <!-- grid -->
+      <div>
+        <div id="cwGrid" class="cw-grid"></div>
+
+        <div class="cw-actions">
+          <button id="cwCheck" class="btn">Comprobar crucigrama</button>
+          <button id="cwShow" class="btn ghost">Mostrar solución</button>
+          <button id="cwReset" class="btn ghost">Reiniciar crucigrama</button>
+        </div>
+      </div>
+
+      <!-- clues -->
+      <div class="clues">
+        <h4>Palabras a encontrar</h4>
+        <ol>
+          <li><strong>AHORRO</strong> — Reserva de dinero para emergencias o proyectos.</li>
+          <li><strong>PRESUPUESTO</strong> — Plan de ingresos y gastos.</li>
+          <li><strong>INVERSION</strong> — Destinar recursos para obtener rendimiento.</li>
+          <li><strong>CREDITO</strong> — Dinero prestado con condiciones.</li>
+          <li><strong>DIVERSIFICAR</strong> — No depender de una sola fuente de ingreso.</li>
+          <li><strong>FONDO</strong> — Reserva para emergencias (fondo de emergencia).</li>
+        </ol>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RECOMENDACIONES -->
+  <section id="recomendaciones" class="card">
+    <h2>Recomendaciones prácticas</h2>
+    <ul>
+      <li>Organiza sesiones presenciales de práctica con la página en la sala de informática de la institución.</li>
+      <li>Fomenta el ahorro familiar con metas pequeñas y visibles (ej.: ahorro para útiles escolares).</li>
+      <li>Registra ingresos y gastos: una libreta o hoja de cálculo es suficiente.</li>
+      <li>Inicia proyectos productivos con capital semilla pequeño y controlado.</li>
+      <li>Comparte lo aprendido en talleres comunitarios: el conocimiento en grupo multiplica el impacto.</li>
+    </ul>
+  </section>
+
+
+<!-- SIMULADOR DE PRESUPUESTO -->
+<section id="simulador" class="card">
+  <h2>Simulador de Presupuesto — ¡Pon en práctica tu planeación!</h2>
+  <p>Ingresa tu ingreso mensual y distribúyelo entre gastos, ahorro e inversión.</p>
+  <div class="quiz-container">
+    <label>💵 Ingreso mensual: <input type="number" id="ingreso" min="0" value="1000000"></label><br><br>
+    <label>🏠 Gastos: <input type="number" id="gasto" min="0" value="500000"></label><br><br>
+    <label>💰 Ahorro: <input type="number" id="ahorro" min="0" value="300000"></label><br><br>
+    <label>📈 Inversión: <input type="number" id="inversion" min="0" value="200000"></label><br><br>
+    <button class="btn" onclick="evaluarPresupuesto()">Evaluar presupuesto</button>
+    <div id="resultadoPresupuesto" style="margin-top:14px;font-weight:700;"></div>
+  </div>
+</section>
+
+<!-- RETO DE DECISIONES FINANCIERAS -->
+<section id="reto" class="card">
+  <h2>Reto de Decisiones Financieras — ¿Qué harías tú?</h2>
+  <p>Responde los escenarios y descubre tu estilo financiero 💡</p>
+  <div class="quiz-container" id="juegoReto">
+    <div id="escenario"></div>
+    <div id="opciones"></div>
+    <button class="btn" id="btnSiguiente" onclick="siguienteReto()" style="margin-top:12px;">Siguiente</button>
+    <div id="resultadoReto" style="margin-top:16px;font-weight:700;"></div>
+  </div>
+</section>
+
+<script>
+// --- SIMULADOR DE PRESUPUESTO ---
+function evaluarPresupuesto(){
+  const ingreso = parseFloat(document.getElementById('ingreso').value)||0;
+  const gasto = parseFloat(document.getElementById('gasto').value)||0;
+  const ahorro = parseFloat(document.getElementById('ahorro').value)||0;
+  const inversion = parseFloat(document.getElementById('inversion').value)||0;
+  const total = gasto + ahorro + inversion;
+  let msg = '';
+  if(total > ingreso){
+    msg = '⚠️ Estás gastando más de lo que ganas. ¡Revisa tu presupuesto!';
+    color = '#ff5050';
+  } else if(ahorro < ingreso*0.1){
+    msg = '💡 Intenta ahorrar al menos el 10% de tus ingresos.';
+    color = '#ffcc00';
+  } else if(inversion >= ingreso*0.2 && ahorro >= ingreso*0.1){
+    msg = '💎 ¡Excelente equilibrio financiero, sigue así!';
+    color = '#00c06b';
+  } else {
+    msg = '✅ Vas por buen camino, ajusta tus metas y sigue aprendiendo.';
+    color = '#00c06b';
+  }
+  document.getElementById('resultadoPresupuesto').innerHTML = `<span style="color:${color}">${msg}</span>`;
+}
+
+// --- RETO DE DECISIONES FINANCIERAS ---
+const retos = [
+  {
+    pregunta: 'Tienes $200.000 extra este mes. ¿Qué harías?',
+    opciones: [
+      {texto: 'Comprar ropa nueva 👕', puntos: 0, feedback:'Gastar está bien, pero considera tus prioridades.'},
+      {texto: 'Ahorrarlo para una meta futura 💰', puntos: 1, feedback:'¡Excelente decisión! Ahorrar fortalece tu seguridad.'},
+      {texto: 'Invertirlo en un pequeño negocio 📈', puntos: 2, feedback:'¡Excelente! Estás pensando en generar ingresos.'}
+    ]
+  },
+  {
+    pregunta: 'Tu amigo te ofrece prestarte dinero para una compra que no necesitas.',
+    opciones: [
+      {texto: 'Aceptar el préstamo', puntos: 0, feedback:'Cuidado, endeudarte sin necesidad puede ser riesgoso.'},
+      {texto: 'Decidir no aceptarlo y esperar 🕓', puntos: 2, feedback:'¡Muy bien! Esperar demuestra inteligencia financiera.'},
+      {texto: 'Usar tus ahorros', puntos: 1, feedback:'Está bien, pero asegúrate de reponerlos pronto.'}
+    ]
+  },
+  {
+    pregunta: 'Encuentras una oferta de inversión con ganancia del 200% en una semana.',
+    opciones: [
+      {texto: 'Invertir todo tu dinero 💸', puntos: 0, feedback:'Cuidado, eso suena a estafa.'},
+      {texto: 'Investigar primero y pedir consejo 🧐', puntos: 2, feedback:'Excelente, siempre analiza antes de invertir.'},
+      {texto: 'Ignorarla y seguir con tus ahorros', puntos: 1, feedback:'Correcto, pero podrías aprender más sobre inversiones seguras.'}
+    ]
+  }
+];
+let indiceReto = 0;
+let puntaje = 0;
+
+function mostrarReto(){
+  const cont = document.getElementById('escenario');
+  const opcionesDiv = document.getElementById('opciones');
+  const reto = retos[indiceReto];
+  cont.innerHTML = `<p class='question'>${reto.pregunta}</p>`;
+  opcionesDiv.innerHTML = '';
+  reto.opciones.forEach((op, i)=>{
+    const btn = document.createElement('button');
+    btn.textContent = op.texto;
+    btn.className = 'btn ghost';
+    btn.style.display = 'block';
+    btn.style.margin = '6px auto';
+    btn.onclick = ()=>{
+      puntaje += op.puntos;
+      document.getElementById('resultadoReto').innerHTML = `<span style='color:#00c06b'>${op.feedback}</span>`;
+    };
+    opcionesDiv.appendChild(btn);
+  });
+}
+function siguienteReto(){
+  indiceReto++;
+  document.getElementById('resultadoReto').innerHTML = '';
+  if(indiceReto < retos.length){
+    mostrarReto();
+  } else {
+    let mensajeFinal = '';
+    if(puntaje >= 5){
+      mensajeFinal = '💎 ¡Eres un estratega financiero!';
+    } else if(puntaje >= 3){
+      mensajeFinal = '🌱 Buen comienzo, sigue aprendiendo.';
+    } else {
+      mensajeFinal = '⚡ Toma el control de tus decisiones financieras, tú puedes hacerlo.';
+    }
+    document.getElementById('juegoReto').innerHTML = `<p style='font-weight:700;color:#00c06b'>${mensajeFinal}</p>`;
+  }
+}
+document.addEventListener('DOMContentLoaded', mostrarReto);
+</script>
+</main>
+
+<footer>
+  <div style="max-width:880px;margin:0 auto">
+    <p style="margin:0 0 6px 0"><strong>Esmeraldas del Saber Financiero</strong> — Proyecto SENA / Institución Educativa Santa Bárbara · Coscuez, San Pablo de Borbur (Boyacá)</p>
+    <p style="margin:0;color:var(--muted)">💎 Pequeñas decisiones financieras hoy, grandes oportunidades mañana.</p>
+  </div>
+</footer>
+
+<script>
+/* ========== Scroll reveal ========== */
+const cards = document.querySelectorAll('.card');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible') });
+},{threshold:0.12});
+cards.forEach(c=>observer.observe(c));
+
+/* ========== Accordion ========== */
+document.querySelectorAll('.acc-head').forEach(head=>{
+  head.addEventListener('click', ()=>{
+    const id = head.getAttribute('data-target');
+    const body = document.getElementById(id);
+    const open = body.classList.contains('open');
+    document.querySelectorAll('.acc-body').forEach(b=>{ b.classList.remove('open'); b.setAttribute('aria-hidden','true'); b.previousElementSibling.setAttribute('aria-expanded','false') });
+    if(!open){ body.classList.add('open'); body.setAttribute('aria-hidden','false'); head.setAttribute('aria-expanded','true') }
+  });
+});
+
+/* ========== Quiz original ========== */
+const quizData = [
+  { q:"¿Cuál es la principal razón para tener un presupuesto en Coscuez?", opts:["Planificar el uso de ingresos variables de la minería","Para pedir más préstamos","Para comparar precios de esmeraldas"], correct:0, explain:"El presupuesto ayuda a planificar cuando los ingresos son irregulares." },
+  { q:"¿Qué se recomienda guardar en un fondo de emergencia?", opts:["Dinero para imprevistos (salud, accidentes, paros)","Dinero para vacaciones","Dinero para juegos"], correct:0, explain:"El fondo de emergencia cubre gastos inesperados y protege la estabilidad familiar." },
+  { q:"¿Qué representa la diversificación para una familia minera?", opts:["Tener varias fuentes de ingreso (agricultura, comercio, minería)","Concentrar todo en la minería","Vender la casa"], correct:0, explain:"Diversificar reduce riesgos si cambia el precio o la producción minera." },
+  { q:"¿Por qué evitar créditos informales?", opts:["Porque suelen tener condiciones y tasas perjudiciales","Porque son rápidos","Porque no requieren papeles"], correct:0, explain:"Los créditos informales suelen ser caros y riesgosos." },
+  { q:"¿Qué práctica ayuda a mejorar el puntaje crediticio?", opts:["Pagar a tiempo las obligaciones y evitar mora","Solicitar muchos créditos","No usar cuentas bancarias"], correct:0, explain:"Pagar a tiempo demuestra responsabilidad y mejora el historial." },
+  { q:"¿Qué porcentaje inicial se sugiere destinar al ahorro cuando los ingresos son variables?", opts:["10% - 20% de cada ingreso extra","80% de todos los ingresos","0% si se gana poco"], correct:0, explain:"Reservar un porcentaje pequeño y constante ayuda a construir un fondo." },
+  { q:"¿Cuál es una inversión responsable para una comunidad rural?", opts:["Proyectos productivos locales con demanda comprobada","Comprar tecnología cara sin planeación","Invertir todo en un solo negocio riesgoso"], correct:0, explain:"Las inversiones pequeñas y planificadas son más sostenibles en contextos rurales." },
+  { q:"¿Qué acción reduce el riesgo de gasto impulsivo?", opts:["Tener una lista y priorizar necesidades","Ir de compras sin plan","Pedir préstamos para compras"], correct:0, explain:"Priorizar evita decisiones impulsivas que afectan el presupuesto." },
+  { q:"¿Cuál es la utilidad de registrar ingresos y gastos?", opts:["Conocer a dónde va el dinero y poder ajustar el presupuesto","Hacer cuentas solo por curiosidad","Para impresionar a otros"], correct:0, explain:"El registro permite tomar decisiones informadas sobre ahorro y gasto." },
+  { q:"¿Qué debe buscar una persona antes de solicitar un crédito formal?", opts:["Tasas, plazos y capacidad de pago real","Que sea rápido y sin evaluación","Que sea del vecino"], correct:0, explain:"Evaluar condiciones evita sobreendeudamiento y problemas futuros." }
+];
+
+const quizContainer = document.getElementById('quizContainer');
+function renderQuiz(){
+  quizContainer.innerHTML = '';
+  quizData.forEach((it,i)=>{
+    const div = document.createElement('div');
+    div.className='q-block';
+    div.innerHTML = `<p class="question">${i+1}. ${it.q}</p><div class="options">${it.opts.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}</div><div class="hint" style="display:none;margin-top:8px;color:var(--muted)">${it.explain}</div>`;
+    quizContainer.appendChild(div);
+  });
+}
+renderQuiz();
+
+document.getElementById('checkBtn').addEventListener('click', ()=>{
+  let score=0;
+  document.querySelectorAll('.q-block').forEach((qb,idx)=>{
+    qb.classList.remove('correct','wrong');
+    const sel = qb.querySelector('input[type=radio]:checked');
+    const hint = qb.querySelector('.hint');
+    hint.style.display='none';
+    if(sel){
+      if(Number(sel.value) === quizData[idx].correct){ score++; qb.classList.add('correct') }
+      else { qb.classList.add('wrong') }
+      hint.style.display='block';
+    } else {
+      qb.classList.add('wrong');
+      hint.style.display='block';
+    }
+  });
+  const pct = Math.round((score/quizData.length)*100);
+  const res = document.getElementById('result');
+  res.style.display='block';
+  let msg = `Obtuviste ${score}/${quizData.length} — ${pct}%`;
+  if(pct === 100) msg += " 🎉 Excelente: manejas los conceptos clave.";
+  else if(pct >= 70) msg += " 👍 Muy bien — repasa algunos puntos.";
+  else if(pct >= 40) msg += " ✨ Va bien — vuelve a revisar las definiciones.";
+  else msg += " 🔎 Recomendado: repasar y volver a intentar.";
+  res.innerHTML = msg;
+  res.scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  document.querySelectorAll('.q-block input[type=radio]').forEach(i=>i.checked=false);
+  document.querySelectorAll('.q-block').forEach(q=>{ q.classList.remove('wrong','correct'); q.querySelector('.hint').style.display='none';});
+  const res = document.getElementById('result'); res.style.display='none'; res.innerHTML='';
+  document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+});
+
+/* ========== CRUCIGRAMA (fácil, casillas con comprobación) ========== */
+/*
+ We'll create a 12x12 grid. Words:
+ AHORRO (6) - placed row 1 col1 horizontally
+ PRESUPUESTO (11) - row3 col1 horizontally
+ INVERSION (9) - column 1 row1 vertically? we'll place row5 col2 vertical
+ CREDITO (7) - row7 col4 horizontal
+ DIVERSIFICAR (12) - row9 col1 horizontal
+ FONDO (5) - row11 col8 horizontal
+
+ We'll define the grid with black squares where no letter, and inputs where letters are expected.
+*/
+
+const cwConfig = {
+  rows:12, cols:12,
+  // layout: array of rows, '.' = black, letters = letter placeholder (uppercase) or '_' for empty letter to fill
+  // We'll build a template and then allow user input in letter cells.
+  template: [
+    // row 0
+    "AHORRO_____",
+    // row1
+    "___________",
+    // row2
+    "PRESUPUESTO",
+    // row3
+    "___________",
+    // row4
+    "_INVERSION_",
+    // row5
+    "___CREDITO_",
+    // row6
+    "___________",
+    // row7
+    "DIVERSIFICAR",
+    // row8
+    "___________",
+    // row9
+    "_______FOND",
+    // row10
+    "__________O",
+    // row11
+    "____________"
+  ]
+};
+
+// But our template above contains letters (solution). We'll render inputs for letters and some black boxes for underscores.
+const cwGridEl = document.getElementById('cwGrid');
+
+function buildCW(){
+  cwGridEl.innerHTML = '';
+  cwGridEl.style.gridTemplateColumns = `repeat(${cwConfig.cols}, 36px)`;
+  cwConfig.template.forEach((rowStr, r)=>{
+    for(let c=0;c<cwConfig.cols;c++){
+      const ch = rowStr[c] || '_';
+      const cell = document.createElement('div');
+      cell.className='cw-cell';
+      if(ch === '_' || ch === undefined){
+        // black cell (no input)
+        cell.classList.add('black');
+      } else {
+        // letter cell -> create input with data-solution
+        const inp = document.createElement('input');
+        inp.setAttribute('maxlength','1');
+        inp.setAttribute('data-solution', ch.toUpperCase());
+        inp.setAttribute('aria-label', `casilla ${r+1}-${c+1}`);
+        inp.addEventListener('input', ()=>{ inp.value = inp.value.toUpperCase().replace(/[^A-ZÑÁÉÍÓÚ]/g,'').slice(0,1); });
+        cell.appendChild(inp);
+      }
+      cwGridEl.appendChild(cell);
+    }
+  });
+}
+buildCW();
+
+function checkCW(showCorrect=false){
+  const cells = cwGridEl.querySelectorAll('.cw-cell');
+  let total=0, correct=0;
+  cells.forEach(cell=>{
+    const inp = cell.querySelector('input');
+    if(inp){
+      total++;
+      const sol = inp.getAttribute('data-solution');
+      const val = (inp.value || '').toUpperCase();
+      if(val === sol){ correct++; cell.style.background='rgba(0,200,107,0.06)'; cell.style.border='1px solid rgba(0,200,107,0.16)' }
+      else { 
+        cell.style.background='rgba(255,80,80,0.03)';
+        cell.style.border='1px solid rgba(255,80,80,0.12)';
+        if(showCorrect) inp.value = sol;
+      }
+    }
+  });
+  return {total,correct};
+}
+
+document.getElementById('cwCheck').addEventListener('click', ()=>{
+  const res = checkCW(false);
+  const msg = `Casillas correctas: ${res.correct}/${res.total}`;
+  alert(msg);
+});
+document.getElementById('cwShow').addEventListener('click', ()=>{
+  checkCW(true);
+});
+document.getElementById('cwReset').addEventListener('click', ()=>{
+  cwGridEl.querySelectorAll('input').forEach(i=>i.value='');
+  cwGridEl.querySelectorAll('.cw-cell').forEach(cell=>{ cell.style.background='rgba(255,255,255,0.02)'; cell.style.border='1px solid rgba(255,255,255,0.03)'; });
+});
+
+/* Preload: reveal first acc */
+window.addEventListener('load', ()=>{
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('visible'));
+  const first = document.getElementById('acc1');
+  if(first){ first.classList.add('open'); first.setAttribute('aria-hidden','false'); first.previousElementSibling.setAttribute('aria-expanded','true'); }
+});
+</script>
+
+<button id="backToTop" title="Volver arriba" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+</body>
+</html>
